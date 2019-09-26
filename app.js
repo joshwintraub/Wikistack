@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const layout = require("./views/layout");
+// const { layout, main } = require("./views/layout");
 const models = require("./models");
 const { db } = require('./models'); // destructuring
 // const wikiRouter = require('./routes/wiki');
@@ -12,9 +12,9 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
-models.db.sync({forece: true});
+models.db.sync({force: true});
 app.use('/wiki', require('./routes/wiki'));
-//app.use('/user', require('./routes/user'));
+app.use('/user', require('./routes/user'));
 
 
 db.authenticate().then(() => {
@@ -22,7 +22,7 @@ db.authenticate().then(() => {
 });
 
 app.get("/", (req, res) => {
-  res.send(layout(''));
+  res.redirect('/wiki');
 });
 
 const PORT = 3000;
